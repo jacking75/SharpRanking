@@ -13,7 +13,7 @@ namespace RtRankingLib
 
                 
         // 새로운 랭킹 추가 혹은 기존 랭킹 ID 반환
-        int AddOrGetRankingIdByName(string rankingName)
+        public int AddOrGetRankingIdByName(string rankingName)
         {
             int RankingIndex = RankingIndices[rankingName].IndexId;
             return RankingIndex;
