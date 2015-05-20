@@ -64,7 +64,7 @@ namespace RtRankingLib
         }
 
         // 유저의 랭킹 정보 얻기
-        public ElementInfo GetUserRanking(int rankingIndexId, uint userId)
+        public ElementInfo GetUserRanking(int rankingIndexId, Int64 userId)
         {
             int IndexPosition = -1;
             var UserScore = default(RankingIndices.UserScore);
@@ -140,24 +140,24 @@ namespace RtRankingLib
             );
         }
 
-        // 유저의 랭킹 정보 삭제
-        public void RemoveUserScore(int rankingIndexId, uint userId)
-        {
-            var Index = RankingIndices[rankingIndexId];
-            Index.Tree.Remove(Index.GetUserScore(userId));
-        }
+        // 정렬이 제대로 동작하지 않음. 유저의 랭킹 정보 삭제
+        //public void RemoveUserScore(int rankingIndexId, Int64 userId)
+        //{
+        //    var Index = RankingIndices[rankingIndexId];
+        //    Index.Tree.Remove(Index.GetUserScore(userId));
+        //}
 
-        // 모든 유저의 랭킹 정보 삭제
-        public int RemoveAllUserScore(int rankingIndexId)
-        {
-            int count = 0;
+        // 정렬이 제대로 동작하지 않음. 모든 유저의 랭킹 정보 삭제
+        //public int RemoveAllUserScore(int rankingIndexId)
+        //{
+        //    int count = 0;
 
-            var RankingIndex = RankingIndices[rankingIndexId];
-            count = RankingIndex.Tree.Count;
-            RankingIndex.RemoveAllItems();
+        //    var RankingIndex = RankingIndices[rankingIndexId];
+        //    count = RankingIndex.Tree.Count;
+        //    RankingIndex.RemoveAllItems();
 
-            return count;
-        }
+        //    return count;
+        //}
     }
 
 

@@ -54,24 +54,77 @@ namespace TestConsole
             Console.WriteLine("랭킹 성능 테스트 - 정렬 검증 완료");
 
 
+            ///
+            //for (int i = 0; i < userCount; ++i)
+            //{
+            //    RankingMgr.RemoveUserScore(rankId, (uint)(i + 1));
+            //}
+
+
+            ////RankingMgr.RemoveAllUserScore(rankId);
+
+            ////for (int i = 0; i < userCount; ++i)
+            ////{
+            ////    var userScore = new RtRankingLib.UserScoreInfo()
+            ////    {
+            ////        UserId = i + 1,
+            ////        ScoreValue = random.Next(1, 2000000000),
+            ////    };
+
+            ////    RankingMgr.AddOrUpdateUserScore(rankId, userScore);            
+            ////}
+
+            ////var fdsd = RankingMgr.GetUserRanking(rankId, 2);
+            //var rankingList1 = RankingMgr.GetUserRankingList(rankId, 0, userCount).ToList();
+
+
+
+            //RankingMgr.RemoveAllUserScore(rankId);
+
+            //for (int i = 0; i < userCount; ++i)
+            //{
+            //    var userScore = new RtRankingLib.UserScoreInfo()
+            //    {
+            //        UserId = i + 1,
+            //        ScoreValue = random.Next(1, 2000000000),
+            //    };
+
+            //    RankingMgr.AddOrUpdateUserScore(rankId, userScore);
+            //}
+
+            //var fdsd1 = RankingMgr.GetUserRanking(rankId, 2);
+            //var rankingList2 = RankingMgr.GetUserRankingList(rankId, 0, userCount).ToList();
+            ///
 
 
 
             Console.WriteLine("랭킹 성능 테스트 - 임의의 유저 업데이트 후 정렬 --->");
-            
-            var userScore1 = new RtRankingLib.UserScoreInfo()
+
+            for (int i = 0; i < 10; ++i)
             {
-                UserId = random.Next(1, userCount),
-                ScoreValue = random.Next(1, 2000000000),
-            };
+                var userScore1 = new RtRankingLib.UserScoreInfo()
+                {
+                    UserId = random.Next(1, userCount),
+                    ScoreTimeStamp = (uint)DateTime.Now.Ticks,
+                    ScoreValue = random.Next(1, 2000000000),
+                };
 
-            var stopWatchWork1 = new System.Diagnostics.Stopwatch();
-            stopWatchWork1.Start();
+                var stopWatchWork1 = new System.Diagnostics.Stopwatch();
+                stopWatchWork1.Start();
 
-            RankingMgr.AddOrUpdateUserScore(rankId, userScore1);
+                RankingMgr.AddOrUpdateUserScore(rankId, userScore1);
 
-            stopWatchWork1.Stop();
-            Console.WriteLine("랭킹 성능 테스트 - 임의의 유저 업데이트 후 정렬. 걸린 시간: {0}", stopWatchWork1.Elapsed.TotalSeconds);
+                stopWatchWork1.Stop();
+                Console.WriteLine("랭킹 성능 테스트 - 임의의 유저 업데이트 후 정렬. 걸린 시간: {0}", stopWatchWork1.Elapsed.TotalSeconds);
+
+
+                var newData = RankingMgr.GetUserRanking(rankId, userScore1.UserId);
+                if (newData.UserId != userScore1.UserId || newData.ScoreValue != userScore1.ScoreValue)
+                {
+                    Console.WriteLine(string.Format("RtRankingLib 랭킹 성능 테스트 - 임의의 유저 업데이트 후 정렬. 데이터 변경이 적용되지 않았음"));
+                    return;
+                }
+            }
 
 
             Console.WriteLine("랭킹 성능 테스트 임의의 유저 업데이트 후 정렬- 정렬 검증 --->");

@@ -38,10 +38,10 @@ namespace RtRankingLib
 				{
 					return false;
 				}
-				if (ScoreValue < this.ScoreValue)
-				{
-					return false;
-				}
+                //if (ScoreValue < this.ScoreValue)
+                //{
+                //    return false;
+                //}
 				return true;
 			}
 

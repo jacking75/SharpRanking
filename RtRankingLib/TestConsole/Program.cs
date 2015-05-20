@@ -11,7 +11,7 @@ namespace TestConsole
         static void Main(string[] args)
         {
             var tester = new PerformanceTest();
-            tester.유저_추가하면서_정렬(1000000);
+            tester.유저_추가하면서_정렬(100);
         }
     }
 }
