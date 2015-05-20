@@ -100,7 +100,7 @@ namespace TestConsole
 
             Console.WriteLine("랭킹 성능 테스트 - 임의의 유저 업데이트 후 정렬 --->");
 
-            for (int i = 0; i < 10; ++i)
+            for (int i = 0; i < 100; ++i)
             {
                 var userScore1 = new RtRankingLib.UserScoreInfo()
                 {
@@ -115,13 +115,39 @@ namespace TestConsole
                 RankingMgr.AddOrUpdateUserScore(rankId, userScore1);
 
                 stopWatchWork1.Stop();
-                Console.WriteLine("랭킹 성능 테스트 - 임의의 유저 업데이트 후 정렬. 걸린 시간: {0}", stopWatchWork1.Elapsed.TotalSeconds);
+                //Console.WriteLine("랭킹 성능 테스트 - 임의의 유저 업데이트 후 정렬. 걸린 시간: {0}", stopWatchWork1.Elapsed.TotalSeconds);
 
 
                 var newData = RankingMgr.GetUserRanking(rankId, userScore1.UserId);
                 if (newData.UserId != userScore1.UserId || newData.ScoreValue != userScore1.ScoreValue)
                 {
                     Console.WriteLine(string.Format("RtRankingLib 랭킹 성능 테스트 - 임의의 유저 업데이트 후 정렬. 데이터 변경이 적용되지 않았음"));
+                    return;
+                }
+            }
+
+            for (int i = 0; i < 100; ++i)
+            {
+                var userScore1 = new RtRankingLib.UserScoreInfo()
+                {
+                    UserId = random.Next(userCount, userCount + userCount),
+                    ScoreTimeStamp = (uint)DateTime.Now.Ticks,
+                    ScoreValue = random.Next(1, 2000000000),
+                };
+
+                var stopWatchWork1 = new System.Diagnostics.Stopwatch();
+                stopWatchWork1.Start();
+
+                RankingMgr.AddOrUpdateUserScore(rankId, userScore1);
+
+                stopWatchWork1.Stop();
+                //Console.WriteLine("랭킹 성능 테스트 - 임의의 유저 업데이트 후 정렬. 걸린 시간: {0}", stopWatchWork1.Elapsed.TotalSeconds);
+
+
+                var newData = RankingMgr.GetUserRanking(rankId, userScore1.UserId);
+                if (newData.UserId != userScore1.UserId || newData.ScoreValue != userScore1.ScoreValue)
+                {
+                    Console.WriteLine(string.Format("RtRankingLib 랭킹 성능 테스트 - 임의의 유저 추가 후 정렬. 데이터 변경이 적용되지 않았음"));
                     return;
                 }
             }
