@@ -13,9 +13,20 @@ namespace RtRankingLib
 
                 
         // 새로운 랭킹 추가 혹은 기존 랭킹 ID 반환
-        public int AddOrGetRankingIdByName(string rankingName)
+        public int AddOrGetRankingIdByName(bool isDescending, string rankingName)
         {
-            int RankingIndex = RankingIndices[rankingName].IndexId;
+            var rankingNameSortType = "";
+
+            if (isDescending)
+            {
+                rankingNameSortType = "-" + rankingName;
+            }
+            else
+            {
+                rankingNameSortType = "+" + rankingName;
+            }
+            
+            int RankingIndex = RankingIndices[rankingNameSortType].IndexId;
             return RankingIndex;
         }
         
@@ -24,6 +35,7 @@ namespace RtRankingLib
         {
             return RankingIndices[rankingId].IndexName;
         }
+
 
         // 랭킹 Id 기준으로 랭킹 정보를 반환
         public GetRankingInfo GetRankingInfo(int rankingId)
@@ -51,7 +63,7 @@ namespace RtRankingLib
             return returnValue;
         }
 
-        //
+        // 유저의 랭킹 정보 얻기
         public ElementInfo GetUserRanking(int rankingIndexId, uint userId)
         {
             int IndexPosition = -1;
@@ -90,7 +102,7 @@ namespace RtRankingLib
             }
         }
 
-        //
+        // 지정 범위의 랭킹 정보 얻기
         public List<ElementInfo> GetUserRankingList(int rankingIndexId, int offset, int getCount)
         {
             var returnValueList = new List<ElementInfo>();
@@ -116,7 +128,7 @@ namespace RtRankingLib
             return returnValueList;
         }
 
-        //
+        // 유저의 랭킹 정보 추가 및 업데이트
         public void AddOrUpdateUserScore(int rankingIndexId, UserScoreInfo userScore)
         {
             var Index = RankingIndices[rankingIndexId];
@@ -128,14 +140,14 @@ namespace RtRankingLib
             );
         }
 
-        //
+        // 유저의 랭킹 정보 삭제
         public void RemoveUserScore(int rankingIndexId, uint userId)
         {
             var Index = RankingIndices[rankingIndexId];
             Index.Tree.Remove(Index.GetUserScore(userId));
         }
 
-        //
+        // 모든 유저의 랭킹 정보 삭제
         public int RemoveAllUserScore(int rankingIndexId)
         {
             int count = 0;
@@ -154,8 +166,8 @@ namespace RtRankingLib
         public int Result;
         public int Length;
         public RankingIndices.SortingDirection Direction;
-        public int TopScore;
-        public int BottomScore;
+        public Int64 TopScore;
+        public Int64 BottomScore;
         public int MaxElements;
         public int TreeHeight;
     }
@@ -164,14 +176,14 @@ namespace RtRankingLib
     {
         public int Position;
         public Int64 UserId;
-        public int ScoreValue;
+        public Int64 ScoreValue;
         public uint ScoreTimeStamp;
     }
 
     public struct UserScoreInfo
     {
         public Int64 UserId;
-        public int ScoreValue;
+        public Int64 ScoreValue;
         public uint ScoreTimeStamp;
     }
 

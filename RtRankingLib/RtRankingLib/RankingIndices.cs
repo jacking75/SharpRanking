@@ -14,15 +14,15 @@ namespace RtRankingLib
 		public enum SortingDirection : int
 		{
 			Invalid = 0,
-			Ascending = +1,
-			Descending = -1,
+			Ascending = +1, // 오름 차순
+			Descending = -1,// 내림 차순
 		}
 
 		public class UserScore
 		{
 			public Int64 UserId;
 			public uint ScoreTimeStamp;
-			public int ScoreValue;
+            public Int64 ScoreValue;
 
 			public override string ToString()
 			{
@@ -32,7 +32,7 @@ namespace RtRankingLib
 				);
 			}
 
-			public bool ShouldUpdate(uint ScoreTimeStamp, int ScoreValue)
+            public bool ShouldUpdate(uint ScoreTimeStamp, Int64 ScoreValue)
 			{
 				if (ScoreTimeStamp < this.ScoreTimeStamp)
 				{
@@ -45,7 +45,7 @@ namespace RtRankingLib
 				return true;
 			}
 
-			public void SetScore(uint ScoreTimeStamp, int ScoreValue)
+            public void SetScore(uint ScoreTimeStamp, Int64 ScoreValue)
 			{
 				this.ScoreTimeStamp = ScoreTimeStamp;
 				this.ScoreValue = ScoreValue;
@@ -101,7 +101,7 @@ namespace RtRankingLib
 				return this.UserScoresByUserId[UserId];
 			}
 
-            public UserScore UpdateUserScore(Int64 UserId, uint ScoreTimeStamp, int ScoreValue)
+            public UserScore UpdateUserScore(Int64 UserId, uint ScoreTimeStamp, Int64 ScoreValue)
 			{
 				bool IsNew = false;
 
