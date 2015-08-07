@@ -8,11 +8,17 @@ namespace RtRankingLib
 {
     public class Manager
     {
-        public RankingIndices RankingIndices = new RankingIndices();
+        RankingIndices RankingIndices = new RankingIndices();
 
 
-                
-        // 새로운 랭킹 추가 혹은 기존 랭킹 ID 반환
+        /// <summary>
+        /// 새로운 랭킹 타입 추가 혹은 기존 랭킹 타입 ID 반환
+        /// 여러 종류의 랭킹 타입(예. 오름차순, 내림 차순, 다양한 점수별로)을 추가할 수 있다.
+        /// 만약 유저 점수1와 유저 점수2 두 가지의 값을 각각 랭킹을 구할 때는 Manager 클래스를 추가하지 않고 이 함수를 사용해서 추가한다.
+        /// </summary>
+        /// <param name="isDescending">true 이면 내림차순</param>
+        /// <param name="rankingName">타입 이름</param>
+        /// <returns>랭킹 타입 Id</returns>
         public int AddOrGetRankingIdByName(bool isDescending, string rankingName)
         {
             var rankingNameSortType = "";
@@ -29,20 +35,27 @@ namespace RtRankingLib
             int RankingIndex = RankingIndices[rankingNameSortType].IndexId;
             return RankingIndex;
         }
-        
-        // 랭킹 Id 기준으로 해당 랭킹의 이름을 반환
+
+        /// <summary>
+        /// 랭킹 Id 기준으로 해당 랭킹의 이름을 반환
+        /// </summary>
+        /// <param name="rankingId">랭킹 unique Id</param>
+        /// <returns>랭킹 이름</returns>
         public string GetRankingNameById(int rankingId)
         {
             return RankingIndices[rankingId].IndexName;
         }
 
-
-        // 랭킹 Id 기준으로 랭킹 정보를 반환
-        public GetRankingInfo GetRankingInfo(int rankingId)
+        /// <summary>
+        /// 랭킹 Id 기준으로 랭킹 정보를 반환 
+        /// </summary>
+        /// <param name="rankingId">랭킹 unique Id</param>
+        /// <returns></returns>
+        public RankingTypeInfo GetRankingTypeInfo(int rankingId)
         {
             var Index = RankingIndices[rankingId];
             
-            var returnValue = new GetRankingInfo()
+            var returnValue = new RankingTypeInfo()
             {
                 Result = 0,
                 Length = Index.Tree.Count,
@@ -63,13 +76,18 @@ namespace RtRankingLib
             return returnValue;
         }
 
-        // 유저의 랭킹 정보 얻기
-        public ElementInfo GetUserRanking(int rankingIndexId, Int64 userId)
+        /// <summary>
+        /// 유저의 랭킹 정보 얻기 
+        /// </summary>
+        /// <param name="rankingId">랭킹 unique Id</param>
+        /// <param name="userId">유저 unique Id</param>
+        /// <returns>현재 순위 정보</returns>
+        public ElementInfo GetUserRanking(int rankingId, Int64 userId)
         {
             int IndexPosition = -1;
             var UserScore = default(RankingIndices.UserScore);
 
-            var Ranking = RankingIndices[rankingIndexId];
+            var Ranking = RankingIndices[rankingId];
             
             try
             {
@@ -102,12 +120,18 @@ namespace RtRankingLib
             }
         }
 
-        // 지정 범위의 랭킹 정보 얻기
-        public List<ElementInfo> GetUserRankingList(int rankingIndexId, int offset, int getCount)
+        /// <summary>
+        /// 지정 범위의 랭킹 정보 얻기 
+        /// </summary>
+        /// <param name="rankingId">랭킹 unique Id</param>
+        /// <param name="offset">범위를 가져올 순위</param>
+        /// <param name="getCount">가져올 수</param>
+        /// <returns>현재 순위 리스트</returns>
+        public List<ElementInfo> GetUserRankingList(int rankingId, int offset, int getCount)
         {
             var returnValueList = new List<ElementInfo>();
 
-            var RankingIndex = RankingIndices[rankingIndexId];
+            var RankingIndex = RankingIndices[rankingId];
             int CurrentEntryOffset = offset;
 
             if (offset >= 0)
@@ -128,10 +152,14 @@ namespace RtRankingLib
             return returnValueList;
         }
 
-        // 유저의 랭킹 정보 추가 및 업데이트
-        public void AddOrUpdateUserScore(int rankingIndexId, UserScoreInfo userScore)
+        /// <summary>
+        /// 유저의 정보 추가 및 업데이트 
+        /// </summary>
+        /// <param name="rankingId">랭킹 unique Id</param>
+        /// <param name="userScore">유저 점수 정보</param>
+        public void AddOrUpdateUserScore(int rankingId, UserScoreInfo userScore)
         {
-            var Index = RankingIndices[rankingIndexId];
+            var Index = RankingIndices[rankingId];
 
             Index.UpdateUserScore(
                 UserId: userScore.UserId,
@@ -140,6 +168,7 @@ namespace RtRankingLib
             );
         }
 
+        #region 보류
         // 정렬이 제대로 동작하지 않음. 유저의 랭킹 정보 삭제
         //public void RemoveUserScore(int rankingIndexId, Int64 userId)
         //{
@@ -158,10 +187,11 @@ namespace RtRankingLib
 
         //    return count;
         //}
+        #endregion
     }
 
 
-    public struct GetRankingInfo
+    public struct RankingTypeInfo
     {
         public int Result;
         public int Length;
